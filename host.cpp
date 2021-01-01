@@ -1,7 +1,8 @@
 #include "stdio.h"
 //#include <ap_fixed.h>
 #include "my_ap_fixed.h"
-
+#include "ap_int.h"
+#include "hls_stream.h"
 
 typedef my_ap_fixed<17,9> my_input_t;
 typedef my_ap_fixed<32,13> my_pixel_t;
@@ -19,6 +20,7 @@ int main(){
 
 	const int GRAD_WEIGHTS[] =  {1,-8,0,8,-1};
 	my_pixel_t temp_z = 0;
+	my_pixel_t temp_y = 0;
 	my_input_t frame1_tmp = 0;
 	my_input_t frame2_tmp = 0;
 	my_input_t frame3_tmp = 0;
@@ -46,6 +48,13 @@ int main(){
 	printf("frame4_tmp:%08x, %f\n", (unsigned int) frame4_tmp(16,0), frame4_tmp.to_float());
 	printf("frame5_tmp:%08x, %f\n", (unsigned int) frame5_tmp(16,0), frame5_tmp.to_float());
 	printf("temp_z:%08x, %f\n", (unsigned int) temp_z(31,0), temp_z.to_float());
+
+	hls::stream< my_pixel_t > din;
+
+	din.write(temp_z);
+
+	temp_y = din.read();
+	printf("temp_y:%08x, %f\n", (unsigned int) temp_y(31,0), temp_y.to_float());
 
 
 	printf("Hello world\n");

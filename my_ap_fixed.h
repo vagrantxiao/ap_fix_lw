@@ -88,11 +88,6 @@ class my_ap_fixed{
 
 		}
 
-
-
-
-
-
 		unsigned int array_to_data (unsigned char bits_array[32]){
 			unsigned tmp_data = 0;
 			for(int i=0; i<32; i++){
@@ -141,19 +136,13 @@ class my_ap_fixed{
 			this->data = op2;
 		}
 
-
-
-
 	    float to_float(){
 	    	unsigned char bits_array[32];
 	    	float i_part=0, d_part=0;
 	    	unsigned tmp_data = data;
 	    	int i=0;
 	    	unsigned char sign_flag = 0;
-	    	for(i=0; i<32; i++){
-	    		bits_array[i] = (tmp_data & 0x00000001) ? 1 : 0;
-	    		tmp_data = tmp_data>>1;
-	    	}
+	    	for(i=0; i<32; i++){ bits_array[i] = (tmp_data & 0x00000001) ? 1 : 0; tmp_data = tmp_data>>1; }
 
 	    	sign_flag = bits_array[_AP_W-1];
 
@@ -165,11 +154,7 @@ class my_ap_fixed{
 	    	//calculate fraction part
 	    	for(i=0; i<(_AP_W-_AP_I); i++) d_part += (float)bits_array[i]/(1<<((_AP_W-_AP_I)-i));
 
-	    	//printf("          i_part=%f\n", i_part);
-	    	//for(i=31; i>=0; i--) printf("%d", bits_array[i]);
-	    	//printf("\n");
-
-	    	//printf("          i_part=%08x\n", i_part);
+	    	// reverse the bits if the sign flag is minus
 	    	return sign_flag == 1 ? (-i_part-d_part) : (i_part+d_part);
 	    }
 
